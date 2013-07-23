@@ -4,6 +4,9 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   respond_to :json
 
+  # The sessions controller has two actions: create for login and destroy for logout.
+  # The first accepts a user JSON object as POST data with an email and a password parameters and returns an auth_token
+  # if the user exists in the database and the password is correct. The logout action expects an auth_token parameter in the url.
   def create
     respond_to do |format|
       format.html { super }
@@ -12,7 +15,7 @@ class Api::V1::SessionsController < Devise::SessionsController
         render :status => 200,
                :json => { :success => true,
                           :info => "Logged in",
-                          :data => { :auth_token => current_user.authentication_token }}
+                          :data => { :auth_token => current_user.authentication_token, :roles => current_user.roles }}
       }
     end
   end
